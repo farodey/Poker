@@ -2,6 +2,10 @@ class Card:
     m_rankChars = "23456789TJQKA"
     m_suitChars = "hdcs"
 
+    def __init__(self, rank, suit):
+        self.suit = suit
+        self.rank = rank
+
     def CharToRank(self, c):
         if c == 'A':
             return 12
