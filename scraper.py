@@ -1,12 +1,13 @@
+import cv2
 from PIL import Image, ImageGrab
 
 
 class Scraper:
 
     def screen(self):
-        image = ImageGrab.grab()
-        # image.save("screen.bmp", "BMP")
-        self.pix = image.load()
+        # self.image = ImageGrab.grab()
+        self.image = Image.open("C:\\Users\\farodey\Desktop\\screen.bmp")
+        self.pix = self.image.load()
 
     def fold(self):
         x = 100
@@ -47,10 +48,38 @@ class Scraper:
         pass
 
     def card(self, ncard):
-        pass
+        if ncard == 1:
+            xmast, ymast, xcard, ycard = 372, 405, 367, 382
 
-    def hash_card(self):
-        cards = { }
+        elif ncard == 2:
+            xmast, ymast, xcard, ycard = 387, 409, 382, 386
+
+        elif ncard == 3:
+            self.xmast, self.ymast, self.xcard, self.ycard = 280, 236, 275, 213
+
+        elif ncard == 4:
+            xmast, ymast, xcard, ycard = 334, 236, 329, 213
+
+        elif ncard == 5:
+            xmast, ymast, xcard, ycard = 388, 236, 383, 213
+
+        elif ncard == 6:
+            xmast, ymast, xcard, ycard = 442, 236, 437, 213
+
+        elif ncard == 7:
+            xmast, ymast, xcard, ycard = 496, 236, 491, 213
+
+        self.im1 = self.image.crop((326, 248, 340, 270))
+        self.im1.show()
+
+        self.resize_image = self.image.resize(8, 8)
+        self.resize_image.show()
+        #self.grey_image = Image.greyscale(self.resize_image)
+        #self.bin_image = self.grey_image.convert("1")
+        #self.bin_image.show()
+
+
+
 
 
 if __name__ == '__main__':

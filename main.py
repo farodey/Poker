@@ -5,6 +5,18 @@ from PyQt5.QtCore import QThread
 from PyQt5.QtWidgets import QApplication, QWidget
 
 
+# тестовый поток для отладки
+class TestThread(QThread):
+    def __init__(self, window):
+        super(TestThread, self).__init__()
+        self.scraper = Scraper()
+        self.window = window
+
+    def run(self):
+        self.scraper.screen()
+        self.scraper.card(3)
+
+
 # поток эквилятора
 class CalculateThread(QThread):
     def __init__(self, window):
@@ -47,8 +59,11 @@ class PokerWindow(QWidget):
         self.setWindowTitle('Poker')
         self.show()
 
-        self.calculateThread = CalculateThread(window=self)
-        self.calculateThread.start()
+        # self.calculateThread = CalculateThread(window=self)
+        # self.calculateThread.start()
+
+        self.testThread = TestThread(window=self)
+        self.testThread.start()
 
 
 if __name__ == '__main__':
