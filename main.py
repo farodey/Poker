@@ -5,18 +5,6 @@ from PyQt5.QtCore import QThread
 from PyQt5.QtWidgets import QApplication, QWidget
 
 
-# тестовый поток для отладки
-class TestThread(QThread):
-    def __init__(self, window):
-        super(TestThread, self).__init__()
-        self.scraper = Scraper()
-        self.window = window
-
-    def run(self):
-        self.scraper.screen()
-        self.scraper.card(3)
-
-
 # поток эквилятора
 class CalculateThread(QThread):
     def __init__(self, window):
@@ -37,18 +25,15 @@ class CalculateThread(QThread):
             # снимок экрана
             self.scraper.screen()
 
+            print(self.scraper.card(2))
+
             # горит кнопка фолд
-            if self.scraper.fold():
-
-                # все данные корректры
-                if self.scraper.play() != 0 and self.scraper.pot() != 0 and self.scraper.round() != 0 and self.scraper.player() != 0:
-
-                    #  Для этой ситуации не выполнялся расчет
-                    if self.scraper.play() != self.calc_play or self.scraper.pot() != self.calc_pot or self.scraper.round() != self.calc_round:
-                        pass
+            # if self.scraper.fold():
 
 
-# окно программы
+
+
+# Окно программы
 class PokerWindow(QWidget):
     def __init__(self):
         super(PokerWindow, self).__init__()
@@ -59,11 +44,9 @@ class PokerWindow(QWidget):
         self.setWindowTitle('Poker')
         self.show()
 
-        # self.calculateThread = CalculateThread(window=self)
-        # self.calculateThread.start()
-
-        self.testThread = TestThread(window=self)
-        self.testThread.start()
+        # Запускаем поток эквилятора
+        self.calculateThread = CalculateThread(window=self)
+        self.calculateThread.start()
 
 
 if __name__ == '__main__':
