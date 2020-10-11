@@ -9,7 +9,7 @@ class Scraper:
         pass
 
     def screen(self):
-        pil_image = Image.open("C:\\Users\\farodey\Desktop\\9.bmp")
+        pil_image = Image.open("C:\\Users\\farodey\Desktop\\card\\8.bmp")
         # pil_image = ImageGrab.grab()
         open_cv_image = np.array(pil_image)
         self.open_cv_image = cv2.cvtColor(open_cv_image, cv2.COLOR_BGR2RGB)
@@ -26,25 +26,34 @@ class Scraper:
         return False
 
     def round(self):
-        y = 100
-        x_flop = 100
-        x_tern = 100
-        x_river = 100
-        r = 100
-        g = 100
-        b = 100
-        if self.pix[x_river, y][0] == r and self.pix[x_river, y][1] == g and self.pix[x_river, y][2] == b:
+        y = 250
+        x_flop = 505
+        x_tern = 569
+        x_river = 632
+        b, g, r, = 255, 255, 255
+
+        if self.open_cv_image[y, x_river][0] == b and self.open_cv_image[y, x_river][1] == g and self.open_cv_image[y, x_river][2] == r:
             return 'river'
-        elif self.pix[x_tern, y][0] == r and self.pix[x_tern, y][1] == g and self.pix[x_tern, y][2] == b:
+        elif self.open_cv_image[y, x_tern][0] == b and self.open_cv_image[y, x_tern][1] == g and self.open_cv_image[y, x_tern][2] == r:
             return 'tern'
-        elif self.pix[x_flop, y][0] == r and self.pix[x_flop, y][1] == g and self.pix[x_flop, y][2] == b:
+        elif self.open_cv_image[y, x_flop][0] == b and self.open_cv_image[y, x_flop][1] == g and self.open_cv_image[y, x_flop][2] == r:
             return 'flop'
         return 'prerflop'
 
-    def pot(self):
-        pass
+    def dealer(self):
+        dict_yx_dealer = {(437, 401): 1, (360, 254): 2, (268, 197): 3, (210, 302): 4, (168, 450): 5,
+                          (210, 302): 6, (185, 634): 7, (234, 731): 8, (405, 652): 9}
+        dict_color_dealer = {1: (209, 208, 215), 2: (209, 208, 218), 3: (211, 210, 213), 4: (211, 211, 215), 5: (211, 211, 211),
+                             6: (209, 209, 215), 7: (213, 212, 218), 8: (211, 211, 211), 9: (210, 209, 216)}
+        for i in dict_yx_dealer:
+            if self.open_cv_image[i[0], i[1]][0] == dict_color_dealer[dict_yx_dealer[i]][0] and \
+                    self.open_cv_image[i[0], i[1]][1] == dict_color_dealer[dict_yx_dealer[i]][1] and \
+                    self.open_cv_image[i[0], i[1]][2] == dict_color_dealer[dict_yx_dealer[i]][2]:
+                return dict_yx_dealer[i]
+        return 0
 
-    def play(self):
+
+    def pot(self):
         pass
 
     def player(self):
@@ -56,7 +65,11 @@ class Scraper:
     def card(self, ncard):
 
         dict_yx_card = {1: (440, 423), 2: (440, 483), 3: (248, 326), 4: (248, 389), 5: (248, 453), 6: (248, 517), 7: (248, 580)}
-        dict_hash = {9908455741284147968: 'Kc', 11061377245890996992: 'Ks'}
+        dict_hash = {9908455741284147968: 'Kc', 11061377245890996992: 'Ks', 16681869581184787439: '4d', 9331994987918785985: '5c',
+                     9331994989483760833: '2c', 9331994988706372035: 'Qc', 11061377245224645764: 'Ts', 16681869580849376000: 'Kd',
+                     14087783001091989383: 'Jh', 9908455741310876865: '9c', 16681869581319393152: '7d', 14087783000299273665: '5h',
+                     16681869579781138304: '3d', 14087783001074817987: 'Qh', 9908455740238585283: '8c', 11061377245638549383: 'Js',
+                     11061377245317490115: '6s', 11061377244781601767: 'As', 14087783000770930115: '6h'}
         print(self.hash_image(dict_yx_card[ncard], 38, 15))
         return dict_hash[self.hash_image(dict_yx_card[ncard], 38, 15)]
 
@@ -91,8 +104,6 @@ class Scraper:
                 if bin_image[y, x] == 0xff:
                     # устанавливаем бит
                     hash = hash | 1 << i
-                else:
-                    pass
                 i += 1
         return hash
 

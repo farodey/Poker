@@ -25,7 +25,9 @@ class CalculateThread(QThread):
             # снимок экрана
             self.scraper.screen()
 
-            print(self.scraper.card(2))
+            print(self.scraper.card(3))
+            print(self.scraper.round())
+            print(self.scraper.dealer())
 
             # горит кнопка фолд
             # if self.scraper.fold():
