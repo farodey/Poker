@@ -1,45 +1,49 @@
-import numpy as np
-import cv2
-from PIL import Image, ImageGrab
+from PyQt5 import QtCore, QtWidgets
 
 
-def hash_image(image, ycard, xcard, y, x):
+class MyWindow(QtWidgets.QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
 
-    # вырезаем карту
-    roi_image = image[ycard:ycard + y, xcard:xcard + x]
+        v_box = QtWidgets.QVBoxLayout(self)
 
-    # уменьшаем разрешение  до 8х8
-    resize_image = cv2.resize(roi_image, (8, 8))
+        box = QtWidgets.QWidget()
+        box.setStyleSheet(box_qss)
+        box.setFixedHeight(50)
+        h_box = QtWidgets.QHBoxLayout(box)
+        v_box.addWidget(box)
 
-    # переводим в градации серого
-    gray_image = cv2.cvtColor(resize_image, cv2.COLOR_BGR2GRAY)
+        label_1 = QtWidgets.QLabel('label_1')
+        h_box.addWidget(label_1)
 
-    # бинаризуем картинку (254 - пороговая величина)
-    th, bin_image = cv2.threshold(gray_image, 254, 255, cv2.THRESH_BINARY)
+        h_box.addSpacing(10)  # +++
 
-    i = 0
-    hash = 0
-    for y in range(8):
-        for x in range(8):
-            # 0xff - белый пиксель
-            if bin_image[y, x] == 0xff:
-                hash = hash | 1 << i
-            else:
-                pass
-            i += 1
-    return hash
+        btn = QtWidgets.QPushButton('btn')
+        btn.setStyleSheet(btn_qss)
+        btn.setFixedSize(40, 30)
+        h_box.addWidget(btn)  # , alignment = QtCore.Qt.AlignLeft)
 
+        h_box.addStretch(1)  # +++
 
-pil_image = Image.open("C:\\Users\\farodey\Desktop\\screen.bmp")
-open_cv_image = np.array(pil_image)
-open_cv_image = cv2.cvtColor(open_cv_image, cv2.COLOR_BGR2RGB)
-
-print(hash_image(open_cv_image, 248, 326, 21, 14))
-print("{0:b}".format(hash_image(open_cv_image, 248, 326, 21, 14)))
+        label_2 = QtWidgets.QLabel('label_2')
+        h_box.addWidget(label_2, alignment=QtCore.Qt.AlignRight)
 
 
+box_qss = '''QWidget {
+                      background-color: yellow;
+                      border-radius: 5px;
+                  }'''
 
+btn_qss = '''QWidget {
+                      background-color: white;
+                      border-radius: 5px;
+                  }'''
 
+if __name__ == '__main__':
+    import sys
 
-
-
+    app = QtWidgets.QApplication(sys.argv)
+    window = MyWindow()
+    window.setWindowTitle(' ')
+    window.show()
+    sys.exit(app.exec_())
